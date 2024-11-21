@@ -1,28 +1,28 @@
 Journey to understanding Operating Systems
 
-# Resources: 
+### Resources: 
 - [OSDev](https://wiki.osdev.org/Expanded_Main_Page)
 
-## To setup the cross-compiler, refer https://wiki.osdev.org/GCC_Cross-Compiler
+### To setup the cross-compiler, refer this [page](https://wiki.osdev.org/GCC_Cross-Compiler)
 
-## Assembling boot.s
+### Assembling boot.s
 
 `i686-elf-as boot.s -o boot.o`
 
-## Compiling Kernel
+### Compiling Kernel
 
 `i686-elf-gcc -c kernel.c -o kernel.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra`
 
-## Linking
+### Linking
 
 `i686-elf-gcc -T linker.ld -o myos.bin -ffreestanding -O2 -nostdlib boot.o kernel.o -lgcc`
 
 ### Also move this myos.bin to the ./isodir/boot/ folder
 
-## Generating .iso file
+### Generating .iso file
 
 `grub2-mkrescue -o myos.iso isodir`
 
-## Running 
+### Running 
 
 `qemu-system-i386 -cdrom myos.iso`
