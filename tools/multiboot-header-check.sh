@@ -1,8 +1,8 @@
 #! /bin/bash
 
-BASE_PATH=/home/rahulb/osdev
+BASE_PATH=/Users/rahulbaradol/Documents/comedy/seireitei
 
-if grub2-file --is-x86-multiboot $BASE_PATH/bin/myos.bin; then
+if i686-elf-grub-file --is-x86-multiboot $BASE_PATH/bin/myos.bin; then
   echo multiboot confirmed
 else
   echo the file is not multiboot

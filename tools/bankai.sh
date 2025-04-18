@@ -1,6 +1,6 @@
 #!/bin/bash
 
-BASE_PATH=/home/rahulb/seireitei
+BASE_PATH=/Users/rahulbaradol/Documents/comedy/seireitei
 
 CRTI_OBJ=$BASE_PATH/build/crti.o
 CRTBEGIN_OBJ=$(i686-elf-gcc $CFLAGS -print-file-name=crtbegin.o)
@@ -24,4 +24,4 @@ i686-elf-gcc -T $BASE_PATH/kernel/arch/i386/linker.ld -o $BASE_PATH/bin/myos.bin
 cp $BASE_PATH/bin/myos.bin $BASE_PATH/isodir/boot/myos.bin
 cp $BASE_PATH/config/grub.cfg $BASE_PATH/isodir/boot/grub/grub.cfg
 
-grub2-mkrescue -o $BASE_PATH/image/myos.iso $BASE_PATH/isodir
+i686-elf-grub-mkrescue -o $BASE_PATH/image/myos.iso $BASE_PATH/isodir
