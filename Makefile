@@ -1,6 +1,6 @@
 # Makefile for building Seireitei OS
 
-BASE_PATH := /Users/rahulbaradol/Documents/comedy/seireitei
+BASE_PATH := /Users/rahulbaradol/Documents/projects/seireitei
 BUILD_DIR := $(BASE_PATH)/build
 ISO_DIR := $(BASE_PATH)/isodir
 IMAGE_DIR := $(BASE_PATH)/image
