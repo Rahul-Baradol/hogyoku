@@ -11,12 +11,15 @@ CRTN_OBJ := $(BUILD_DIR)/crtn.o
 CRTBEGIN_OBJ := $(shell i686-elf-gcc $(CFLAGS) -print-file-name=crtbegin.o)
 CRTEND_OBJ := $(shell i686-elf-gcc $(CFLAGS) -print-file-name=crtend.o)
 
-KERNEL_OBJS := $(BUILD_DIR)/boot.o $(BUILD_DIR)/kernel.o $(BUILD_DIR)/terminal.o
+KERNEL_OBJS := $(BUILD_DIR)/gdt.o $(BUILD_DIR)/idt.o $(BUILD_DIR)/boot.o $(BUILD_DIR)/kernel.o $(BUILD_DIR)/screen.o
 
 all: directories iso
 
 directories:
 	mkdir -p $(BUILD_DIR) $(ISO_DIR)/boot/grub $(IMAGE_DIR) $(BIN_DIR)
+
+$(BUILD_DIR)/gdt.o: $(BASE_PATH)/kernel/arch/i386/gdt.s
+	i686-elf-as $< -o $@
 
 $(BUILD_DIR)/boot.o: $(BASE_PATH)/kernel/arch/i386/boot.s
 	i686-elf-as $< -o $@
@@ -27,10 +30,13 @@ $(CRTI_OBJ): $(BASE_PATH)/kernel/arch/i386/crti.s
 $(CRTN_OBJ): $(BASE_PATH)/kernel/arch/i386/crtn.s
 	i686-elf-as $< -o $@
 
+$(BUILD_DIR)/idt.o: $(BASE_PATH)/kernel/kernel/idt.c
+	i686-elf-gcc -c $< -o $@ -std=gnu99 -ffreestanding -O2 -Wall -Wextra
+
 $(BUILD_DIR)/kernel.o: $(BASE_PATH)/kernel/kernel/kernel.c
 	i686-elf-gcc -c $< -o $@ -std=gnu99 -ffreestanding -O2 -Wall -Wextra
 
-$(BUILD_DIR)/terminal.o: $(BASE_PATH)/kernel/kernel/terminal.c
+$(BUILD_DIR)/screen.o: $(BASE_PATH)/kernel/kernel/screen.c
 	i686-elf-gcc -c $< -o $@ -std=gnu99 -ffreestanding -O2 -Wall -Wextra
 
 $(BIN_DIR)/myos.bin: $(CRTI_OBJ) $(CRTN_OBJ) $(KERNEL_OBJS)
@@ -40,9 +46,12 @@ $(BIN_DIR)/myos.bin: $(CRTI_OBJ) $(CRTN_OBJ) $(KERNEL_OBJS)
 iso: $(BIN_DIR)/myos.bin
 	cp $< $(ISO_DIR)/boot/myos.bin
 	cp $(BASE_PATH)/config/grub.cfg $(ISO_DIR)/boot/grub/grub.cfg
-	i686-elf-grub-mkrescue -o $(IMAGE_DIR)/myos.iso $(ISO_DIR)
+	i686-elf-grub-mkrescue -o $(IMAGE_DIR)/seireitei.iso $(ISO_DIR)
+
+start:
+	qemu-system-x86_64 -cdrom $(BASE_PATH)/image/seireitei.iso -boot d -m 2G
 
 clean:
 	rm -rf $(BUILD_DIR) $(ISO_DIR) $(IMAGE_DIR) $(BIN_DIR)
 
-.PHONY: all directories iso clean
+.PHONY: all directories iso clean start

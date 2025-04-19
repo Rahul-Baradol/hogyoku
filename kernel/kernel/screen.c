@@ -1,10 +1,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
-#include "../include/terminal.h"
-
-const size_t VGA_WIDTH = 80;
-const size_t VGA_HEIGHT = 25;
+#include "../include/screen.h"
 
 size_t terminal_row;
 size_t terminal_column;

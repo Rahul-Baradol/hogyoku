@@ -2,7 +2,7 @@ Journey to understanding Operating Systems
 
 Running via QEMU
 ```
-qemu-system-x86_64 -cdrom /Users/rahulbaradol/Documents/projects/seireitei/image/myos.iso -boot d -m 2G
+qemu-system-x86_64 -cdrom /Users/rahulbaradol/Documents/projects/seireitei/image/seireitei.iso -boot d -m 2G
 ```
 
 Resources: 

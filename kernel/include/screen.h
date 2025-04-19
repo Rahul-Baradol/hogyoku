@@ -1,9 +1,12 @@
-#ifndef TERMINAL_H
-#define TERMINAL_H
+#ifndef SCREEN_H
+#define SCREEN_H
 
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
+
+#define VGA_WIDTH 80
+#define VGA_HEIGHT 25
 
 /* Hardware text mode color constants. */
 enum vga_color {

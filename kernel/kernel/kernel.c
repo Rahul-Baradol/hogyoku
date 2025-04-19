@@ -1,7 +1,8 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
-#include "../include/terminal.h"
+#include "../include/screen.h"
+#include "../include/idt.h"
 
 /* Check if the compiler thinks you are targeting the wrong operating system. */
 #if defined(__linux__)
@@ -13,9 +14,9 @@
 #error "Source needs to be compiled with a ix86-elf compiler"
 #endif
 
-void kernel_main(void) 
-{
-	/* Initialize terminal interface */
+void kernel_main(void) {
+	setup_idt();
+	
 	terminal_initialize();
 
 	terminal_writestring("Bankai!\n\nGetsugatensho...\n");
