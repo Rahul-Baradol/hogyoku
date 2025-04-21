@@ -1,5 +1,3 @@
-# Makefile for building Seireitei OS
-
 BASE_PATH := /Users/rahulbaradol/Documents/projects/seireitei
 BUILD_DIR := $(BASE_PATH)/build
 ISO_DIR := $(BASE_PATH)/isodir
@@ -11,36 +9,39 @@ CRTN_OBJ := $(BUILD_DIR)/crtn.o
 CRTBEGIN_OBJ := $(shell i686-elf-gcc $(CFLAGS) -print-file-name=crtbegin.o)
 CRTEND_OBJ := $(shell i686-elf-gcc $(CFLAGS) -print-file-name=crtend.o)
 
-KERNEL_OBJS := $(BUILD_DIR)/gdt.o $(BUILD_DIR)/idt.o $(BUILD_DIR)/boot.o $(BUILD_DIR)/kernel.o $(BUILD_DIR)/screen.o
+KERNEL_OBJS := $(BUILD_DIR)/gdt.o $(BUILD_DIR)/idt.o $(BUILD_DIR)/boot.o $(BUILD_DIR)/kernel.o $(BUILD_DIR)/screen.o $(BUILD_DIR)/setup.o
 
 all: directories iso
 
 directories:
 	mkdir -p $(BUILD_DIR) $(ISO_DIR)/boot/grub $(IMAGE_DIR) $(BIN_DIR)
 
-$(BUILD_DIR)/gdt.o: $(BASE_PATH)/kernel/arch/i386/gdt.s
+$(BUILD_DIR)/gdt.o: $(BASE_PATH)/arch/i386/boot/gdt.s
 	i686-elf-as $< -o $@
 
-$(BUILD_DIR)/boot.o: $(BASE_PATH)/kernel/arch/i386/boot.s
+$(BUILD_DIR)/boot.o: $(BASE_PATH)/arch/i386/boot/boot.s
 	i686-elf-as $< -o $@
 
-$(CRTI_OBJ): $(BASE_PATH)/kernel/arch/i386/crti.s
+$(CRTI_OBJ): $(BASE_PATH)/arch/i386/boot/crti.s
 	i686-elf-as $< -o $@
 
-$(CRTN_OBJ): $(BASE_PATH)/kernel/arch/i386/crtn.s
+$(CRTN_OBJ): $(BASE_PATH)/arch/i386/boot/crtn.s
 	i686-elf-as $< -o $@
 
-$(BUILD_DIR)/idt.o: $(BASE_PATH)/kernel/kernel/idt.c
+$(BUILD_DIR)/setup.o: $(BASE_PATH)/arch/i386/boot/setup.c
 	i686-elf-gcc -c $< -o $@ -std=gnu99 -ffreestanding -O2 -Wall -Wextra
 
-$(BUILD_DIR)/kernel.o: $(BASE_PATH)/kernel/kernel/kernel.c
+$(BUILD_DIR)/idt.o: $(BASE_PATH)/arch/i386/boot/idt.c
 	i686-elf-gcc -c $< -o $@ -std=gnu99 -ffreestanding -O2 -Wall -Wextra
 
-$(BUILD_DIR)/screen.o: $(BASE_PATH)/kernel/kernel/screen.c
+$(BUILD_DIR)/kernel.o: $(BASE_PATH)/arch/i386/kernel/kernel.c
+	i686-elf-gcc -c $< -o $@ -std=gnu99 -ffreestanding -O2 -Wall -Wextra
+
+$(BUILD_DIR)/screen.o: $(BASE_PATH)/arch/i386/drivers/screen.c
 	i686-elf-gcc -c $< -o $@ -std=gnu99 -ffreestanding -O2 -Wall -Wextra
 
 $(BIN_DIR)/myos.bin: $(CRTI_OBJ) $(CRTN_OBJ) $(KERNEL_OBJS)
-	i686-elf-gcc -T $(BASE_PATH)/kernel/arch/i386/linker.ld -o $@ -ffreestanding -O2 -nostdlib \
+	i686-elf-gcc -T $(BASE_PATH)/arch/i386/linker.ld -o $@ -ffreestanding -O2 -nostdlib \
 		$(CRTI_OBJ) $(CRTBEGIN_OBJ) $(KERNEL_OBJS) $(CRTEND_OBJ) $(CRTN_OBJ) -lgcc
 
 iso: $(BIN_DIR)/myos.bin
@@ -48,8 +49,8 @@ iso: $(BIN_DIR)/myos.bin
 	cp $(BASE_PATH)/config/grub.cfg $(ISO_DIR)/boot/grub/grub.cfg
 	i686-elf-grub-mkrescue -o $(IMAGE_DIR)/seireitei.iso $(ISO_DIR)
 
-start:
-	qemu-system-x86_64 -cdrom $(BASE_PATH)/image/seireitei.iso -boot d -m 2G
+run:
+	qemu-system-i386 -cdrom $(BASE_PATH)/image/seireitei.iso -boot d -m 2G
 
 clean:
 	rm -rf $(BUILD_DIR) $(ISO_DIR) $(IMAGE_DIR) $(BIN_DIR)

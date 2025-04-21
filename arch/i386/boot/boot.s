@@ -27,9 +27,7 @@ _start:
 
 	call _init
 
-	lgdt gdt_descriptor
-
-	call kernel_main
+	call setup
 
 	cli
 1:	hlt

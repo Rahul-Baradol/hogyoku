@@ -1,6 +1,6 @@
 #! /bin/bash
 
-BASE_PATH=/Users/rahulbaradol/Documents/comedy/seireitei
+BASE_PATH=/Users/rahulbaradol/Documents/projects/seireitei
 
 if i686-elf-grub-file --is-x86-multiboot $BASE_PATH/bin/myos.bin; then
   echo multiboot confirmed

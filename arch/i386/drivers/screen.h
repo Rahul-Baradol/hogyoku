@@ -34,14 +34,14 @@ static inline uint16_t vga_entry(unsigned char uc, uint8_t color);
 
 size_t strlen(const char* str);
 
-void terminal_initialize(void);
+void screen_initialize(void);
 
-void terminal_putentryat(char c, uint8_t color, size_t x, size_t y);
+void screen_putentryat(char c, uint8_t color, size_t x, size_t y);
 
-void terminal_putchar(char c);
+void screen_putchar(char c);
 
-void terminal_write(const char* data, size_t size);
+void screen_write(const char* data, size_t size);
 
-void terminal_writestring(const char* data);
+void print(const char* data);
 
 #endif

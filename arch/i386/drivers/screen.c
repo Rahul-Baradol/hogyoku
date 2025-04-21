@@ -1,7 +1,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
-#include "../include/screen.h"
+#include "screen.h"
 
 size_t terminal_row;
 size_t terminal_column;
@@ -26,7 +26,7 @@ size_t strlen(const char* str)
 	return len;
 }
 
-void terminal_initialize(void) 
+void screen_initialize(void) 
 {
 	terminal_row = 0;
 	terminal_column = 0;
@@ -40,13 +40,13 @@ void terminal_initialize(void)
 	}
 }
 
-void terminal_putentryat(char c, uint8_t color, size_t x, size_t y) 
+void screen_putentryat(char c, uint8_t color, size_t x, size_t y) 
 {
 	const size_t index = y * VGA_WIDTH + x;
 	terminal_buffer[index] = vga_entry(c, color);
 }
 
-void terminal_putchar(char c) 
+void screen_putchar(char c) 
 {
 	if (c == '\n') {
 		terminal_column = 0;
@@ -55,7 +55,7 @@ void terminal_putchar(char c)
 		return;
 	}
 
-	terminal_putentryat(c, terminal_color, terminal_column, terminal_row);
+	screen_putentryat(c, terminal_color, terminal_column, terminal_row);
 	if (++terminal_column == VGA_WIDTH) {
 		terminal_column = 0;
 		if (++terminal_row == VGA_HEIGHT)
@@ -63,13 +63,13 @@ void terminal_putchar(char c)
 	}
 }
 
-void terminal_write(const char* data, size_t size) 
+void screen_write(const char* data, size_t size) 
 {
 	for (size_t i = 0; i < size; i++)
-		terminal_putchar(data[i]);
+		screen_putchar(data[i]);
 }
 
-void terminal_writestring(const char* data) 
+void print(const char* data) 
 {
-	terminal_write(data, strlen(data));
+	screen_write(data, strlen(data));
 }
