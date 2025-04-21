@@ -1,5 +1,3 @@
-.extern gdt_descriptor
-
 .set ALIGN,    1<<0             /* align loaded modules on page boundaries */
 .set MEMINFO,  1<<1             /* provide memory map */
 .set FLAGS,    ALIGN | MEMINFO  /* this is the Multiboot 'flag' field */

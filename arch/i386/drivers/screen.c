@@ -2,6 +2,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include "screen.h"
+#include "../../../libc/string.h"
 
 size_t terminal_row;
 size_t terminal_column;
@@ -16,14 +17,6 @@ static inline uint8_t vga_entry_color(enum vga_color fg, enum vga_color bg)
 static inline uint16_t vga_entry(unsigned char uc, uint8_t color) 
 {
 	return (uint16_t) uc | (uint16_t) color << 8;
-}
-
-size_t strlen(const char* str) 
-{
-	size_t len = 0;
-	while (str[len])
-		len++;
-	return len;
 }
 
 void screen_initialize(void) 
@@ -63,13 +56,18 @@ void screen_putchar(char c)
 	}
 }
 
-void screen_write(const char* data, size_t size) 
+void screen_write(const char *data, int size) 
 {
-	for (size_t i = 0; i < size; i++)
+	for (int i = 0; i < size; i++)
 		screen_putchar(data[i]);
 }
 
-void print(const char* data) 
+void print(const char *data) 
 {
 	screen_write(data, strlen(data));
 }
+
+void println(const char *data) {
+	print(data);
+	print("\n");
+}	

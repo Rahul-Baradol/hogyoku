@@ -1,0 +1,14 @@
+{
+    "files.associations": {
+        "idt.h": "c",
+        "function.h": "c",
+        "string.h": "c",
+        "kernel.h": "c",
+        "port.h": "c",
+        "isr.h": "c",
+        "gdt.h": "c",
+        "locale": "c",
+        "screen.h": "c",
+        "stdint.h": "c"
+    }
+}

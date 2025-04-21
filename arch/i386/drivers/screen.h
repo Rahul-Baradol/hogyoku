@@ -32,16 +32,16 @@ static inline uint8_t vga_entry_color(enum vga_color fg, enum vga_color bg);
 
 static inline uint16_t vga_entry(unsigned char uc, uint8_t color);
 
-size_t strlen(const char* str);
-
 void screen_initialize(void);
 
 void screen_putentryat(char c, uint8_t color, size_t x, size_t y);
 
 void screen_putchar(char c);
 
-void screen_write(const char* data, size_t size);
+void screen_write(const char* data, int size);
 
 void print(const char* data);
+
+void println(const char* data);
 
 #endif
