@@ -3,11 +3,11 @@
 #include "port.h"
 #include "../../../libc/function.h"
 #include "../drivers/screen.h"
+#include "../../../libc/string.h";
 
 u32 tick = 0;
 
 static void timer_callback(registers_t regs) {
-    println("timer boys");
     tick++;
     UNUSED(regs);
 }
@@ -23,9 +23,7 @@ void init_timer(u32 freq) {
     /* Send the command */
     port_byte_out(0x43, 0x36); /* Command port */
 
-
     port_byte_out(0x40, low);
     port_byte_out(0x40, high);
-    println("\ncomedy\n");
 }
 

@@ -13,7 +13,7 @@ u8 port_byte_in (u16 port) {
      *
      * Inputs and outputs are separated by colons
      */
-    __asm__("in %%dx, %%al" : "=a" (result) : "d" (port));
+    __asm__ __volatile__("in %%dx, %%al" : "=a" (result) : "d" (port));
     return result;
 }
 

@@ -5,17 +5,16 @@
 extern void init_gdt();
 
 void setup() {
-    screen_initialize();
-    println("screen Initialized");
+    // screen_initialize();
+    // println("screen Initialized");
 
-    println("setting up gdt...");
+    // println("setting up gdt...\n");
     init_gdt();
 
-    // still need to setup idt
-    // the files related to idt do not work yet 
+    // println("setting up idt...\n");
+    isr_install();
+    irq_install();
 
-    // this is a checkpoint => where GDT is setup 
-
-    println("starting kernel...");
+    kprint("starting kernel...");
     kernel_main();
 }

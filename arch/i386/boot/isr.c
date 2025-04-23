@@ -47,12 +47,16 @@ void isr_install() {
     // Remap the PIC
     port_byte_out(0x20, 0x11);
     port_byte_out(0xA0, 0x11);
+
     port_byte_out(0x21, 0x20);
     port_byte_out(0xA1, 0x28);
+
     port_byte_out(0x21, 0x04);
     port_byte_out(0xA1, 0x02);
+
     port_byte_out(0x21, 0x01);
     port_byte_out(0xA1, 0x01);
+
     port_byte_out(0x21, 0x0);
     port_byte_out(0xA1, 0x0); 
 
@@ -117,14 +121,11 @@ char *exception_messages[] = {
 };
 
 void isr_handler(registers_t r) {
-    println("received interrupt: ");
-    char s[3];
-    int_to_ascii(r.int_no, s);
-    println(s);
-    println("\n");
-    println(exception_messages[r.int_no]);
-    println("\n");
-    asm volatile("hlt");
+    // kprintln("received interrupt: ");
+    // char s[3];
+    // int_to_ascii(r.int_no, s);
+    // kprintln(s);
+    // kprintln(exception_messages[r.int_no]);
 }
 
 void register_interrupt_handler(u8 n, isr_t handler) {
@@ -132,6 +133,10 @@ void register_interrupt_handler(u8 n, isr_t handler) {
 }
 
 void irq_handler(registers_t r) {
+    // kprintln("in the irq handler");
+    char s[3];
+    int_to_ascii(r.int_no, s);
+    // kprintln(s);
     /* After every interrupt we need to send an EOI to the PICs
      * or they will not send another interrupt again */
     if (r.int_no >= 40) port_byte_out(0xA0, 0x20); /* slave */
@@ -145,10 +150,12 @@ void irq_handler(registers_t r) {
 }
 
 void irq_install() {
+    kprint("in the irq_install\n");
+
     /* Enable interruptions */
     asm volatile("sti");
     /* IRQ0: timer */
     init_timer(50);
-    /* IRQ1: keyboard */
+    // /* IRQ1: keyboard */
     init_keyboard();
 }

@@ -25,7 +25,7 @@ _start:
 
 	call _init
 
-	call setup
+	jmp setup
 
 	cli
 1:	hlt

@@ -9,6 +9,11 @@
         "gdt.h": "c",
         "locale": "c",
         "screen.h": "c",
-        "stdint.h": "c"
+        "stdint.h": "c",
+        "__locale": "c",
+        "mem.h": "c",
+        "cstring": "c",
+        "util.h": "c",
+        "types.h": "c"
     }
 }

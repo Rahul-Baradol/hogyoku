@@ -1,47 +1,23 @@
 #ifndef SCREEN_H
 #define SCREEN_H
 
-#include <stdbool.h>
-#include <stddef.h>
-#include <stdint.h>
+#include "../../../include/types.h"
 
-#define VGA_WIDTH 80
-#define VGA_HEIGHT 25
+#define VIDEO_ADDRESS 0xb8000
+#define MAX_ROWS 25
+#define MAX_COLS 80
+#define WHITE_ON_BLACK 0x0f
+#define RED_ON_WHITE 0xf4
 
-/* Hardware text mode color constants. */
-enum vga_color {
-	VGA_COLOR_BLACK = 0,
-	VGA_COLOR_BLUE = 1,
-	VGA_COLOR_GREEN = 2,
-	VGA_COLOR_CYAN = 3,
-	VGA_COLOR_RED = 4,
-	VGA_COLOR_MAGENTA = 5,
-	VGA_COLOR_BROWN = 6,
-	VGA_COLOR_LIGHT_GREY = 7,
-	VGA_COLOR_DARK_GREY = 8,
-	VGA_COLOR_LIGHT_BLUE = 9,
-	VGA_COLOR_LIGHT_GREEN = 10,
-	VGA_COLOR_LIGHT_CYAN = 11,
-	VGA_COLOR_LIGHT_RED = 12,
-	VGA_COLOR_LIGHT_MAGENTA = 13,
-	VGA_COLOR_LIGHT_BROWN = 14,
-	VGA_COLOR_WHITE = 15,
-};
+/* Screen i/o ports */
+#define REG_SCREEN_CTRL 0x3d4
+#define REG_SCREEN_DATA 0x3d5
 
-static inline uint8_t vga_entry_color(enum vga_color fg, enum vga_color bg);
-
-static inline uint16_t vga_entry(unsigned char uc, uint8_t color);
-
-void screen_initialize(void);
-
-void screen_putentryat(char c, uint8_t color, size_t x, size_t y);
-
-void screen_putchar(char c);
-
-void screen_write(const char* data, int size);
-
-void print(const char* data);
-
-void println(const char* data);
+/* Public kernel API */
+void clear_screen();
+void kprint_at(char *message, int col, int row);
+void kprint(char *message);
+void kprintln(char *message);
+void kprint_backspace();
 
 #endif
