@@ -24,11 +24,7 @@ _start:
 	mov $stack_top, %esp
 
 	call _init
-
+	
 	jmp setup
-
-	cli
-1:	hlt
-	jmp 1b
 
 .size _start, . - _start

@@ -25,8 +25,8 @@ merge:
 $(BUILD_DIR)/gdt.o: $(BASE_PATH)/arch/i386/boot/gdt.s
 	i686-elf-as $< -o $@
 
-$(BUILD_DIR)/interrupt.o: $(BASE_PATH)/arch/i386/boot/interrupt.asm
-	nasm -f elf32 $< -o $@
+$(BUILD_DIR)/interrupt.o: $(BASE_PATH)/arch/i386/boot/interrupt.s
+	i686-elf-as $< -o $@
 
 $(BUILD_DIR)/boot.o: $(BASE_PATH)/arch/i386/boot/boot.s
 	i686-elf-as $< -o $@
