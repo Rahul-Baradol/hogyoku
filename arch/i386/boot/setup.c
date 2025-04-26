@@ -5,18 +5,18 @@
 extern void init_gdt();
 
 void setup() {
-    kprintln("Setting up..");
-    kprintln("Setting up gdt...");
+    screen_println("Setting up..");
+    screen_println("Setting up gdt...");
     init_gdt();
 
-    kprintln("Setting up idt...");
+    screen_println("Setting up idt...");
     isr_install();
-    kprintln("");
+    screen_println("");
 
-    kprintln("Installing IRQs...");
+    screen_println("Installing IRQs...");
     irq_install();
-    kprintln("");
+    screen_println("");
 
-    kprintln("Starting kernel...");
+    screen_println("Starting kernel...");
     kernel_main();  
 }

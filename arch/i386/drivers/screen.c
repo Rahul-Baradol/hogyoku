@@ -3,23 +3,18 @@
 #include "../drivers/mem.h"
 #include "../../../libc/string.h"
 
-/* Declaration of private functions */
 int get_cursor_offset();
 void set_cursor_offset(int offset);
-int print_char(char c, int col, int row, char attr);
+int screen_print_char(char c, int col, int row, char attr);
 int get_offset(int col, int row);
 int get_offset_row(int offset);
 int get_offset_col(int offset);
-
-/**********************************************************
- * Public Kernel API functions                            *
- **********************************************************/
 
 /**
  * Print a message on the specified location
  * If col, row, are negative, we will use the current offset
  */
-void kprint_at(char *message, int col, int row) {
+void screen_print_at(char *message, int col, int row) {
     /* Set cursor if col/row are negative */
     int offset;
     if (col >= 0 && row >= 0)
@@ -33,55 +28,41 @@ void kprint_at(char *message, int col, int row) {
     /* Loop through message and print it */
     int i = 0;
     while (message[i] != 0) {
-        offset = print_char(message[i++], col, row, WHITE_ON_BLACK);
+        offset = screen_print_char(message[i++], col, row, WHITE_ON_BLACK);
         /* Compute row/col for next iteration */
         row = get_offset_row(offset);
         col = get_offset_col(offset);
     }
 }
 
-void kprint(char *message) {
-    kprint_at(message, -1, -1);
+void screen_print(char *message) {
+    screen_print_at(message, -1, -1);
 }
 
-void kprint_int(int num) {
+void screen_print_int(int num) {
     char str[11];
     int_to_ascii(num, str);
-    kprint(str);
+    screen_print(str);
 }
 
-void kprintln_int(int num) {
-    kprint_int(num);
-    kprint("\n");
+void screen_println_int(int num) {
+    screen_print_int(num);
+    screen_print("\n");
 }
 
-void kprintln(char *message) {
-    kprint(message);
-	kprint("\n");
+void screen_println(char *message) {
+    screen_print(message);
+	screen_print("\n");
 }
 
-void kprint_backspace() {
+void screen_backspace() {
     int offset = get_cursor_offset()-2;
     int row = get_offset_row(offset);
     int col = get_offset_col(offset);
-    print_char(0x08, col, row, WHITE_ON_BLACK);
+    screen_print_char(0x08, col, row, WHITE_ON_BLACK);
 }
 
-
-/**********************************************************
- * Private kernel functions                               *
- **********************************************************/
-
-
-/**
- * Innermost print function for our kernel, directly accesses the video memory 
- *
- * If 'col' and 'row' are negative, we will print at current cursor location
- * If 'attr' is zero it will use 'white on black' as default
- * Returns the offset of the next character
- * Sets the video cursor to the returned offset
- */
-int print_char(char c, int col, int row, char attr) {
+int screen_print_char(char c, int col, int row, char attr) {
     u8 *vidmem = (u8*) VIDEO_ADDRESS;
     if (!attr) attr = WHITE_ON_BLACK;
 

@@ -121,11 +121,11 @@ char *exception_messages[] = {
 };
 
 void isr_handler(registers_t r) {
-    kprintln("received interrupt: ");
+    screen_println("received interrupt: ");
     char s[3];
     int_to_ascii(r.int_no, s);
-    kprintln(s);
-    kprintln(exception_messages[r.int_no]);
+    screen_println(s);
+    screen_println(exception_messages[r.int_no]);
 }
 
 void register_interrupt_handler(u8 n, isr_t handler) {

@@ -40,9 +40,9 @@ static void keyboard_callback(registers_t regs) {
 
     if (scancode == BACKSPACE) {
         backspace(key_buffer);
-        kprint_backspace();
+        screen_backspace();
     } else if (scancode == ENTER) {
-        kprint("\n");
+        screen_print("\n");
         user_input(key_buffer); /* kernel-controlled function */
         key_buffer[0] = '\0';
     } else {
@@ -50,13 +50,13 @@ static void keyboard_callback(registers_t regs) {
         /* Remember that kprint only accepts char[] */
         char str[2] = {letter, '\0'};
         append(key_buffer, letter);
-        kprint(str);
+        screen_print(str);
     }
     
     UNUSED(regs);
 }
 
 void init_keyboard() {
-    kprintln("Initializing keyboard...");
+    screen_println("Initializing keyboard...");
     register_interrupt_handler(IRQ1, keyboard_callback); 
 }

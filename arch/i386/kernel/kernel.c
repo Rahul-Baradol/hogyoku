@@ -7,16 +7,16 @@ __attribute__((noreturn)) void kernel_nop_loop() {
 }
 
 __attribute__((noreturn)) void kernel_main() {
-    kprintln("In the kernel now :)\n");
+    screen_println("In the kernel now :)\n");
     
     kernel_nop_loop();
 }
 
 void user_input(char *input) {
     if (strcmp(input, "END") == 0) {
-        kprintln("ENDING...");
+        screen_println("ENDING...");
         asm volatile("hlt");
     }
-    kprint("You said: ");
-    kprintln(input);
+    screen_print("You said: ");
+    screen_println(input);
 }
