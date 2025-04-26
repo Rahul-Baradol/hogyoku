@@ -2,8 +2,14 @@
 #include "kernel.h"
 #include "../../../libc/string.h"
 
-void kernel_main() {
+__attribute__((noreturn)) void kernel_nop_loop() {
+    while (1) {}
+}
+
+__attribute__((noreturn)) void kernel_main() {
     kprintln("In the kernel now :)\n");
+    
+    kernel_nop_loop();
 }
 
 void user_input(char *input) {

@@ -27,4 +27,6 @@ _start:
 	
 	jmp setup
 
+	# we never come back here
+
 .size _start, . - _start

@@ -121,11 +121,11 @@ char *exception_messages[] = {
 };
 
 void isr_handler(registers_t r) {
-    // kprintln("received interrupt: ");
-    // char s[3];
-    // int_to_ascii(r.int_no, s);
-    // kprintln(s);
-    // kprintln(exception_messages[r.int_no]);
+    kprintln("received interrupt: ");
+    char s[3];
+    int_to_ascii(r.int_no, s);
+    kprintln(s);
+    kprintln(exception_messages[r.int_no]);
 }
 
 void register_interrupt_handler(u8 n, isr_t handler) {
@@ -133,10 +133,8 @@ void register_interrupt_handler(u8 n, isr_t handler) {
 }
 
 void irq_handler(registers_t r) {
-    // kprintln("in the irq handler");
     char s[3];
     int_to_ascii(r.int_no, s);
-    // kprintln(s);
     /* After every interrupt we need to send an EOI to the PICs
      * or they will not send another interrupt again */
     if (r.int_no >= 40) port_byte_out(0xA0, 0x20); /* slave */
@@ -150,8 +148,6 @@ void irq_handler(registers_t r) {
 }
 
 void irq_install() {
-    kprint("in the irq_install\n");
-
     /* Enable interruptions */
     asm volatile("sti");
     /* IRQ0: timer */

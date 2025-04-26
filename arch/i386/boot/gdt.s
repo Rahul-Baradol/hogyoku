@@ -8,20 +8,16 @@ gdt_code:
     .word 0xffff    
     .word 0x0       
     .byte 0x0       
-    # .byte 10011010b 
-    # .byte 11001111b 
-    .byte 0x9A
-    .byte 0xCF
+    .byte 0x9A # 10011010b 
+    .byte 0xCF # 11001111b 
     .byte 0x0       
 
 gdt_data:
     .word 0xffff
     .word 0x0
     .byte 0x0
-    # .byte 10010010b
-    # .byte 11001111b
-    .byte 0x92
-    .byte 0xCF
+    .byte 0x92 # 10010010b
+    .byte 0xCF # 11001111b
     .byte 0x0
 
 gdt_end:
