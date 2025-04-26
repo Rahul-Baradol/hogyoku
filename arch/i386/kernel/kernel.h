@@ -1,2 +1,2 @@
 void kernel_main();
-void user_input(char *input);
+void keyboard_input(char *input);

@@ -121,11 +121,12 @@ char *exception_messages[] = {
 };
 
 void isr_handler(registers_t r) {
-    screen_println("received interrupt: ");
+    screen_print("\nReceived interrupt: ");
     char s[3];
     int_to_ascii(r.int_no, s);
     screen_println(s);
     screen_println(exception_messages[r.int_no]);
+    asm volatile("hlt");
 }
 
 void register_interrupt_handler(u8 n, isr_t handler) {
@@ -135,6 +136,7 @@ void register_interrupt_handler(u8 n, isr_t handler) {
 void irq_handler(registers_t r) {
     char s[3];
     int_to_ascii(r.int_no, s);
+
     /* After every interrupt we need to send an EOI to the PICs
      * or they will not send another interrupt again */
     if (r.int_no >= 40) port_byte_out(0xA0, 0x20); /* slave */
@@ -150,8 +152,10 @@ void irq_handler(registers_t r) {
 void irq_install() {
     /* Enable interruptions */
     asm volatile("sti");
+
     /* IRQ0: timer */
     init_timer(50);
+    
     // /* IRQ1: keyboard */
     init_keyboard();
 }

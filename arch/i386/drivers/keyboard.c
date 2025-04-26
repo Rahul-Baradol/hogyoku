@@ -43,7 +43,7 @@ static void keyboard_callback(registers_t regs) {
         screen_backspace();
     } else if (scancode == ENTER) {
         screen_print("\n");
-        user_input(key_buffer); /* kernel-controlled function */
+        keyboard_input(key_buffer); /* kernel-controlled function */
         key_buffer[0] = '\0';
     } else {
         char letter = sc_ascii[(int)scancode];

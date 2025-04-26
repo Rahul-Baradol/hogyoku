@@ -12,7 +12,7 @@ __attribute__((noreturn)) void kernel_main() {
     kernel_nop_loop();
 }
 
-void user_input(char *input) {
+void keyboard_input(char *input) {
     if (strcmp(input, "END") == 0) {
         screen_println("ENDING...");
         asm volatile("hlt");
