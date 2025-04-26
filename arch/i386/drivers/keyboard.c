@@ -6,6 +6,7 @@
 #include "../../../libc/function.h"
 #include "../kernel/kernel.h"
 #include "../drivers/mem.h"
+#include "stdbool.h"
 
 #define BACKSPACE 0x0E
 #define ENTER 0x1C
@@ -25,9 +26,17 @@ const char sc_ascii[] = { '?', '?', '1', '2', '3', '4', '5', '6',
         'H', 'J', 'K', 'L', ';', '\'', '`', '?', '\\', 'Z', 'X', 'C', 'V', 
         'B', 'N', 'M', ',', '.', '/', '?', '?', '?', ' '};
 
+bool is_key_pressed(int scancode) {
+    return (scancode & 0x80) == 0;
+}
+
 static void keyboard_callback(registers_t regs) {
     /* The PIC leaves us the scancode in port 0x60 */
     u8 scancode = port_byte_in(0x60);
+
+    if (!is_key_pressed(scancode)) {
+        return;
+    }
 
     if (scancode == BACKSPACE) {
         backspace(key_buffer);

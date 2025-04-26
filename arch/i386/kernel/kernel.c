@@ -13,6 +13,10 @@ __attribute__((noreturn)) void kernel_main() {
 }
 
 void user_input(char *input) {
+    if (strcmp(input, "END") == 0) {
+        kprintln("ENDING...");
+        asm volatile("hlt");
+    }
     kprint("You said: ");
     kprintln(input);
 }

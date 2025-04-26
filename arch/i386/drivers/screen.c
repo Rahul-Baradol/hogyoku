@@ -1,6 +1,7 @@
 #include "screen.h"
 #include "../cpu/port.h"
 #include "../drivers/mem.h"
+#include "../../../libc/string.h"
 
 /* Declaration of private functions */
 int get_cursor_offset();
@@ -41,6 +42,17 @@ void kprint_at(char *message, int col, int row) {
 
 void kprint(char *message) {
     kprint_at(message, -1, -1);
+}
+
+void kprint_int(int num) {
+    char str[11];
+    int_to_ascii(num, str);
+    kprint(str);
+}
+
+void kprintln_int(int num) {
+    kprint_int(num);
+    kprint("\n");
 }
 
 void kprintln(char *message) {
@@ -149,6 +161,14 @@ void clear_screen() {
 }
 
 
-int get_offset(int col, int row) { return 2 * (row * MAX_COLS + col); }
-int get_offset_row(int offset) { return offset / (2 * MAX_COLS); }
-int get_offset_col(int offset) { return (offset - (get_offset_row(offset)*2*MAX_COLS))/2; }
+int get_offset(int col, int row) { 
+    return 2 * (row * MAX_COLS + col); 
+}
+
+int get_offset_row(int offset) { 
+    return offset / (2 * MAX_COLS); 
+}
+
+int get_offset_col(int offset) { 
+    return (offset - (get_offset_row(offset)*2*MAX_COLS))/2; 
+}

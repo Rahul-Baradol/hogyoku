@@ -18,6 +18,8 @@ void clear_screen();
 void kprint_at(char *message, int col, int row);
 void kprint(char *message);
 void kprintln(char *message);
+void kprint_int(int num);
+void kprintln_int(int num);
 void kprint_backspace();
 
 #endif
