@@ -8,15 +8,23 @@ __attribute__((noreturn)) void kernel_nop_loop() {
 
 __attribute__((noreturn)) void kernel_main() {
     screen_println("In the kernel now :)\n");
+    screen_print("$ ");
     
     kernel_nop_loop();
 }
 
-void keyboard_input(char *input) {
+void accept_input() {
+    screen_print("$ ");
+}
+
+void handle_keyboard_input(char *input) {
     if (strcmp(input, "END") == 0) {
         screen_println("ENDING...");
         asm volatile("hlt");
     }
     screen_print("You said: ");
     screen_println(input);
+    screen_println("");
+    
+    accept_input();
 }

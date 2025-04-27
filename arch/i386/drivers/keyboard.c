@@ -10,8 +10,9 @@
 
 #define BACKSPACE 0x0E
 #define ENTER 0x1C
+#define KEY_BUFFER_LENGTH 256
 
-static char key_buffer[256];
+static char key_buffer[KEY_BUFFER_LENGTH];
 
 #define SC_MAX 57
 const char *sc_name[] = { "ERROR", "Esc", "1", "2", "3", "4", "5", "6", 
@@ -41,17 +42,31 @@ static void keyboard_callback(registers_t regs) {
     if (scancode == BACKSPACE) {
         backspace(key_buffer);
         screen_backspace();
-    } else if (scancode == ENTER) {
+        UNUSED(regs);
+        return;
+    } 
+    
+    if (scancode == ENTER) {
         screen_print("\n");
-        keyboard_input(key_buffer); /* kernel-controlled function */
+        handle_keyboard_input(key_buffer); 
         key_buffer[0] = '\0';
-    } else {
-        char letter = sc_ascii[(int)scancode];
-        /* Remember that kprint only accepts char[] */
-        char str[2] = {letter, '\0'};
-        append(key_buffer, letter);
-        screen_print(str);
+        UNUSED(regs);
+        return;
     }
+
+    if (strlen(key_buffer) >= KEY_BUFFER_LENGTH) {
+        screen_print("\n[+] Key Buffer could be of 256 length max\n\n");
+        key_buffer[0] = '\0';
+        accept_input();
+        UNUSED(regs);
+        return;
+    }
+    
+    char letter = sc_ascii[(int)scancode];
+    
+    char str[2] = {letter, '\0'};
+    append(key_buffer, letter);
+    screen_print(str);
     
     UNUSED(regs);
 }

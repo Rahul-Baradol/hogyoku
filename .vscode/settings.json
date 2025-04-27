@@ -14,6 +14,7 @@
         "mem.h": "c",
         "cstring": "c",
         "util.h": "c",
-        "types.h": "c"
+        "types.h": "c",
+        "stdbool.h": "c"
     }
 }
