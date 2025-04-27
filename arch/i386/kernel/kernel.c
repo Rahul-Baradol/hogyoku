@@ -18,8 +18,8 @@ void accept_input() {
 }
 
 void handle_keyboard_input(char *input) {
-    if (strcmp(input, "END") == 0) {
-        screen_println("ENDING...");
+    if (strcmp(input, "KATEN KYOKOTSU KARAMATSU SHINJUU") == 0) {
+        screen_println("System Halting xD ...");
         asm volatile("hlt");
     }
     screen_print("You said: ");
