@@ -25,7 +25,7 @@ _start:
 
 	call _init
 	
-	jmp setup
+	jmp kernel_main
 
 	# we never come back here
 

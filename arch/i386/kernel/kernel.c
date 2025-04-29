@@ -1,13 +1,29 @@
 #include "../drivers/screen.h"
 #include "kernel.h"
 #include "../../../libc/string.h"
+#include "../boot/isr.h"
 
 __attribute__((noreturn)) void kernel_nop_loop() {
     while (1) {}
 }
 
 __attribute__((noreturn)) void kernel_main() {
-    screen_println("In the kernel now :)\n");
+    screen_println("(toy mode)");
+    screen_print("kernel is live :)\n\n");
+        
+    screen_println("Setting up gdt...");
+    init_gdt();
+
+    screen_println("Setting up idt...");
+    isr_install();
+    screen_println("");
+
+    screen_println("Installing IRQs...");
+    irq_install();
+    screen_println("");
+
+    screen_print("use Shunsui's bankai to halt the system\n\n");
+
     screen_print("$ ");
     
     kernel_nop_loop();

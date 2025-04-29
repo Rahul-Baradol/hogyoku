@@ -26,8 +26,8 @@ gdt_descriptor:
     .word gdt_end - gdt_start - 1 
     .long gdt_start 
 
-.set CODE_SEGMENT, gdt_code - gdt_start
-.set DATA_SEG, gdt_data - gdt_start
+.set CODE_SEGMENT, 0x08
+.set DATA_SEG, 0x10
 
 init_gdt:
     lgdt gdt_descriptor

@@ -3,7 +3,7 @@
 #include "port.h"
 #include "../../../libc/function.h"
 #include "../drivers/screen.h"
-#include "../../../libc/string.h";
+#include "../../../libc/string.h"
 
 u32 tick = 0;
 
