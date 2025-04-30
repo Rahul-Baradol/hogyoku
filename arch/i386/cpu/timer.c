@@ -1,11 +1,13 @@
 #include "timer.h"
-#include "../boot/isr.h"
 #include "port.h"
-#include "../../../libc/function.h"
+
+#include "../boot/isr.h"
 #include "../drivers/screen.h"
+
+#include "../../../libc/function.h"
 #include "../../../libc/string.h"
 
-u32 tick = 0;
+volatile u32 tick = 0;
 
 static void timer_callback(registers_t regs) {
     tick++;

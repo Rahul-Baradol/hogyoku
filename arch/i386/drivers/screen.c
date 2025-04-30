@@ -1,6 +1,8 @@
 #include "screen.h"
+
 #include "../cpu/port.h"
-#include "../drivers/mem.h"
+
+#include "../../../libc/mem.h"
 #include "../../../libc/string.h"
 
 int get_cursor_offset();

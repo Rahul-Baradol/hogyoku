@@ -16,13 +16,15 @@ all: directories iso
 directories:
 	mkdir -p $(BUILD_DIR) $(ISO_DIR)/boot/grub $(IMAGE_DIR) $(BIN_DIR)
 
+# arch/i386/boot ->
+
+$(BUILD_DIR)/boot.o: $(BASE_PATH)/arch/i386/boot/boot.s
+	i686-elf-as $< -o $@
+
 $(BUILD_DIR)/gdt.o: $(BASE_PATH)/arch/i386/boot/gdt.s
 	i686-elf-as $< -o $@
 
 $(BUILD_DIR)/interrupt.o: $(BASE_PATH)/arch/i386/boot/interrupt.s
-	i686-elf-as $< -o $@
-
-$(BUILD_DIR)/boot.o: $(BASE_PATH)/arch/i386/boot/boot.s
 	i686-elf-as $< -o $@
 
 $(CRTI_OBJ): $(BASE_PATH)/arch/i386/boot/crti.s
@@ -31,8 +33,13 @@ $(CRTI_OBJ): $(BASE_PATH)/arch/i386/boot/crti.s
 $(CRTN_OBJ): $(BASE_PATH)/arch/i386/boot/crtn.s
 	i686-elf-as $< -o $@
 
+$(BUILD_DIR)/idt.o: $(BASE_PATH)/arch/i386/boot/idt.c
+	i686-elf-gcc -c $< -o $@ -std=gnu99 -ffreestanding -O2 -Wall -Wextra
+
 $(BUILD_DIR)/isr.o: $(BASE_PATH)/arch/i386/boot/isr.c
 	i686-elf-gcc -c $< -o $@ -std=gnu99 -ffreestanding -O2 -Wall -Wextra
+
+# arch/i386/cpu ->
 
 $(BUILD_DIR)/port.o: $(BASE_PATH)/arch/i386/cpu/port.c
 	i686-elf-gcc -c $< -o $@ -std=gnu99 -ffreestanding -O2 -Wall -Wextra
@@ -40,27 +47,34 @@ $(BUILD_DIR)/port.o: $(BASE_PATH)/arch/i386/cpu/port.c
 $(BUILD_DIR)/timer.o: $(BASE_PATH)/arch/i386/cpu/timer.c
 	i686-elf-gcc -c $< -o $@ -std=gnu99 -ffreestanding -O2 -Wall -Wextra
 
-$(BUILD_DIR)/keyboard.o: $(BASE_PATH)/arch/i386/drivers/keyboard.c
-	i686-elf-gcc -c $< -o $@ -std=gnu99 -ffreestanding -O2 -Wall -Wextra
-
-$(BUILD_DIR)/mem.o: $(BASE_PATH)/arch/i386/drivers/mem.c
-	i686-elf-gcc -c $< -o $@ -std=gnu99 -ffreestanding -O2 -Wall -Wextra
-
-$(BUILD_DIR)/string.o: $(BASE_PATH)/libc/string.c
-	i686-elf-gcc -c $< -o $@ -std=gnu99 -ffreestanding -O2 -Wall -Wextra
-
-$(BUILD_DIR)/idt.o: $(BASE_PATH)/arch/i386/boot/idt.c
-	i686-elf-gcc -c $< -o $@ -std=gnu99 -ffreestanding -O2 -Wall -Wextra
+# arch/i386/kernel ->
 
 $(BUILD_DIR)/kernel.o: $(BASE_PATH)/arch/i386/kernel/kernel.c
+	i686-elf-gcc -c $< -o $@ -std=gnu99 -ffreestanding -O2 -Wall -Wextra
+
+# arch/i386/drivers -> 
+
+$(BUILD_DIR)/keyboard.o: $(BASE_PATH)/arch/i386/drivers/keyboard.c
 	i686-elf-gcc -c $< -o $@ -std=gnu99 -ffreestanding -O2 -Wall -Wextra
 
 $(BUILD_DIR)/screen.o: $(BASE_PATH)/arch/i386/drivers/screen.c
 	i686-elf-gcc -c $< -o $@ -std=gnu99 -ffreestanding -O2 -Wall -Wextra
 
+# libc -> 
+
+$(BUILD_DIR)/mem.o: $(BASE_PATH)/libc/mem.c
+	i686-elf-gcc -c $< -o $@ -std=gnu99 -ffreestanding -O2 -Wall -Wextra
+
+$(BUILD_DIR)/string.o: $(BASE_PATH)/libc/string.c
+	i686-elf-gcc -c $< -o $@ -std=gnu99 -ffreestanding -O2 -Wall -Wextra
+
+# kernel binary -> 
+
 $(BIN_DIR)/hogyoku.bin: $(CRTI_OBJ) $(CRTN_OBJ) $(KERNEL_OBJS)
 	i686-elf-gcc -T $(BASE_PATH)/arch/i386/linker.ld -o $@ -ffreestanding -O2 -nostdlib \
 		$(CRTI_OBJ) $(CRTBEGIN_OBJ) $(KERNEL_OBJS) $(CRTEND_OBJ) $(CRTN_OBJ) -lgcc
+
+# kernel image -> 
 
 iso: $(BIN_DIR)/hogyoku.bin
 	cp $< $(ISO_DIR)/boot/hogyoku.bin

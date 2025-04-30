@@ -1,4 +1,3 @@
-
 isr_common_stub:
     # 1. Save CPU state
 	pusha # Pushes edi,esi,ebp,esp,ebx,edx,ecx,eax

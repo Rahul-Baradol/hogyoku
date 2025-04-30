@@ -1,12 +1,15 @@
+#include "../kernel/kernel.h"
+
 #include "keyboard.h"
+#include "screen.h"
+#include "stdbool.h"
+
 #include "../cpu/port.h"
 #include "../boot/isr.h"
-#include "screen.h"
+
 #include "../../../libc/string.h"
 #include "../../../libc/function.h"
-#include "../kernel/kernel.h"
-#include "../drivers/mem.h"
-#include "stdbool.h"
+#include "../../../libc/mem.h"
 
 #define BACKSPACE 0x0E
 #define ENTER 0x1C

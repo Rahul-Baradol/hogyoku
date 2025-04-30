@@ -5,4 +5,6 @@
 
 void init_timer(u32 freq);
 
+extern volatile u32 tick;
+
 #endif
