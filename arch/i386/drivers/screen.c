@@ -41,13 +41,13 @@ void screen_print(char *message) {
     screen_print_at(message, -1, -1);
 }
 
-void screen_print_int(int num) {
-    char str[11];
+void screen_print_int(unsigned long num) {
+    char str[20];
     int_to_ascii(num, str);
     screen_print(str);
 }
 
-void screen_println_int(int num) {
+void screen_println_int(unsigned long num) {
     screen_print_int(num);
     screen_print("\n");
 }

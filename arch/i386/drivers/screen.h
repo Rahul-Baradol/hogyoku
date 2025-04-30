@@ -18,8 +18,8 @@ void clear_screen();
 void screen_print_at(char *message, int col, int row);
 void screen_print(char *message);
 void screen_println(char *message);
-void screen_print_int(int num);
-void screen_println_int(int num);
+void screen_print_int(unsigned long num);
+void screen_println_int(unsigned long num);
 void screen_backspace();
 
 #endif
