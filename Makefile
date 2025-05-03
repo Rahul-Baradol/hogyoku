@@ -9,9 +9,12 @@ CRTN_OBJ := $(BUILD_DIR)/crtn.o
 CRTBEGIN_OBJ := $(shell i686-elf-gcc $(CFLAGS) -print-file-name=crtbegin.o)
 CRTEND_OBJ := $(shell i686-elf-gcc $(CFLAGS) -print-file-name=crtend.o)
 
-KERNEL_OBJS := $(BUILD_DIR)/gdt.o $(BUILD_DIR)/interrupt.o $(BUILD_DIR)/string.o $(BUILD_DIR)/keyboard.o $(BUILD_DIR)/timer.o $(BUILD_DIR)/port.o $(BUILD_DIR)/isr.o $(BUILD_DIR)/mem.o $(BUILD_DIR)/idt.o $(BUILD_DIR)/boot.o $(BUILD_DIR)/kernel.o $(BUILD_DIR)/screen.o 
+KERNEL_OBJS := $(BUILD_DIR)/gdt.o $(BUILD_DIR)/paging.o $(BUILD_DIR)/interrupt.o $(BUILD_DIR)/string.o $(BUILD_DIR)/keyboard.o $(BUILD_DIR)/timer.o $(BUILD_DIR)/port.o $(BUILD_DIR)/isr.o $(BUILD_DIR)/mem.o $(BUILD_DIR)/idt.o $(BUILD_DIR)/boot.o $(BUILD_DIR)/kernel.o $(BUILD_DIR)/screen.o 
+CHAOTIC_OBJS := $(BUILD_DIR)/corrupt_kernel_memory.o
 
 all: directories iso
+
+chaotic: directories chaotic_iso
 
 directories:
 	mkdir -p $(BUILD_DIR) $(ISO_DIR)/boot/grub $(IMAGE_DIR) $(BIN_DIR)
@@ -22,6 +25,9 @@ $(BUILD_DIR)/boot.o: $(BASE_PATH)/arch/i386/boot/boot.s
 	i686-elf-as $< -o $@
 
 $(BUILD_DIR)/gdt.o: $(BASE_PATH)/arch/i386/boot/gdt.s
+	i686-elf-as $< -o $@
+
+$(BUILD_DIR)/paging.o: $(BASE_PATH)/arch/i386/boot/paging.s
 	i686-elf-as $< -o $@
 
 $(BUILD_DIR)/interrupt.o: $(BASE_PATH)/arch/i386/boot/interrupt.s
@@ -38,6 +44,9 @@ $(BUILD_DIR)/idt.o: $(BASE_PATH)/arch/i386/boot/idt.c
 
 $(BUILD_DIR)/isr.o: $(BASE_PATH)/arch/i386/boot/isr.c
 	i686-elf-gcc -c $< -o $@ -std=gnu99 -ffreestanding -O2 -Wall -Wextra
+
+$(BUILD_DIR)/corrupt_kernel_memory.o: $(BASE_PATH)/arch/i386/chaos_tests/corrupt_kernel_memory.s
+	i686-elf-as $< -o $@
 
 # arch/i386/cpu ->
 
@@ -74,9 +83,18 @@ $(BIN_DIR)/hogyoku.bin: $(CRTI_OBJ) $(CRTN_OBJ) $(KERNEL_OBJS)
 	i686-elf-gcc -T $(BASE_PATH)/arch/i386/linker.ld -o $@ -ffreestanding -O2 -nostdlib \
 		$(CRTI_OBJ) $(CRTBEGIN_OBJ) $(KERNEL_OBJS) $(CRTEND_OBJ) $(CRTN_OBJ) -lgcc
 
+$(BIN_DIR)/uncontrolled_hogyoku.bin: $(CRTI_OBJ) $(CRTN_OBJ) $(KERNEL_OBJS) $(CHAOTIC_OBJS)
+	i686-elf-gcc -T $(BASE_PATH)/arch/i386/linker.ld -o $@ -ffreestanding -O2 -nostdlib \
+		$(CRTI_OBJ) $(CRTBEGIN_OBJ) $(KERNEL_OBJS) $(CHAOTIC_OBJS) $(CRTEND_OBJ) $(CRTN_OBJ) -lgcc
+
 # kernel image -> 
 
 iso: $(BIN_DIR)/hogyoku.bin
+	cp $< $(ISO_DIR)/boot/hogyoku.bin
+	cp $(BASE_PATH)/config/grub.cfg $(ISO_DIR)/boot/grub/grub.cfg
+	i686-elf-grub-mkrescue -o $(IMAGE_DIR)/hogyoku.iso $(ISO_DIR)
+
+chaotic_iso: $(BIN_DIR)/uncontrolled_hogyoku.bin
 	cp $< $(ISO_DIR)/boot/hogyoku.bin
 	cp $(BASE_PATH)/config/grub.cfg $(ISO_DIR)/boot/grub/grub.cfg
 	i686-elf-grub-mkrescue -o $(IMAGE_DIR)/hogyoku.iso $(ISO_DIR)

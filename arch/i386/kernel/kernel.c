@@ -12,6 +12,8 @@
 
 #define KEY_BUFFER_LENGTH 256
 
+extern void enable_paging();
+
 volatile bool bankai = 0;
 volatile bool keyboard_lock = 0;
 
@@ -77,7 +79,10 @@ __attribute__((regparm(0))) void kernel_main(unsigned long magic, unsigned long 
     
     while (tick < base_tick+100) {    }
 
-    screen_println("");
+    // Enable Paging
+    screen_println("\nEnabling Paging...");
+    enable_paging();
+    screen_println("Paging enabled!\n");
 }
 
 void handle_keyboard_enter(char *input) {
@@ -100,13 +105,13 @@ void handle_keyboard_enter(char *input) {
         asm volatile("hlt");
     }
 
-    if (!bankai) {
+    // if (!bankai) {
         screen_print("You said: ");
         screen_println(input);
         screen_println("");
         
         accept_input();
-    }
+    // }
 }
 
 void handle_keyboard_input(u8 scancode) {
