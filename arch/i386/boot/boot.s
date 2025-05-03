@@ -26,7 +26,7 @@ stack_bottom:
 stack_top:
 
 .section .text
-.global _start
+.global _start, clear_interrupts, enable_interrupts
 
 _start:
 	mov $stack_top, %esp
@@ -43,5 +43,13 @@ _start:
 	call kernel_main
 
 	jmp .
+
+clear_interrupts:
+	cli
+	ret
+
+enable_interrupts:
+	sti
+	ret
 
 .size _start, . - _start

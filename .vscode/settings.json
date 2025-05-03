@@ -17,6 +17,7 @@
         "types.h": "c",
         "stdbool.h": "c",
         "timer.h": "c",
-        "multiboot.h": "c"
+        "multiboot.h": "c",
+        "keyboard.h": "c"
     }
 }
