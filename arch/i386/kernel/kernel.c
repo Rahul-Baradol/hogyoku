@@ -9,6 +9,7 @@
 #include "../cpu/timer.h"
 
 #include "../../../libc/string.h"
+#include "../../../libc/mem.h"
 
 #define KEY_BUFFER_LENGTH 256
 
@@ -83,6 +84,16 @@ __attribute__((regparm(0))) void kernel_main(unsigned long magic, unsigned long 
     screen_println("\nEnabling Paging...");
     enable_paging();
     screen_println("Paging enabled!\n");
+
+    // Test memory allocator
+    uint8_t *ptr = (uint8_t*) kmalloc(1); 
+    *ptr = 10;
+
+    uint8_t *ptr2 = (uint8_t*) kmalloc(1);
+    *ptr2 = 120;    
+    
+    screen_println_int(*ptr);
+    screen_println_int(*ptr2);
 }
 
 void handle_keyboard_enter(char *input) {

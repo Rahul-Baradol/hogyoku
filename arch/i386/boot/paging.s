@@ -8,7 +8,7 @@ page_table:
     .skip 4096
 
 .section .text
-.global enable_paging, test_paging
+.global enable_paging
 
 enable_paging:
     lea page_directory, %eax
