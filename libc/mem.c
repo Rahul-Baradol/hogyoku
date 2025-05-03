@@ -15,8 +15,8 @@ void memory_set(u8 *dest, u8 val, u32 len) {
 }
 
 // toy memory allocator - works for now x)
-uint32_t* kmalloc(uint32_t size) {
-    uint32_t *cur_pointer = (uint32_t*) free_memory_pointer;
-    free_memory_pointer += size;
+uint8_t* kmalloc() {
+    uint8_t *cur_pointer = (uint8_t*) free_memory_pointer;
+    free_memory_pointer++;
     return cur_pointer;
 } 

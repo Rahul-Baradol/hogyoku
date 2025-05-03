@@ -72,24 +72,17 @@ __attribute__((regparm(0))) void kernel_main(unsigned long magic, unsigned long 
     volatile u32 base_tick = tick;   
 
     clear_screen();
-    screen_print("GETSUGA...");
-
-    while (tick < base_tick+50) {    }
-
-    screen_println("TENSHO...");
     
-    while (tick < base_tick+100) {    }
-
     // Enable Paging
     screen_println("\nEnabling Paging...");
     enable_paging();
     screen_println("Paging enabled!\n");
 
     // Test memory allocator
-    uint8_t *ptr = (uint8_t*) kmalloc(1); 
+    uint8_t *ptr = kmalloc(); 
     *ptr = 10;
 
-    uint8_t *ptr2 = (uint8_t*) kmalloc(1);
+    uint8_t *ptr2 = kmalloc();
     *ptr2 = 120;    
     
     screen_println_int(*ptr);

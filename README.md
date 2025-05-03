@@ -13,4 +13,4 @@ To setup the cross-compiler, refer this [page](https://wiki.osdev.org/GCC_Cross-
 Preview:
 
 ![Preview is supposed to be here :(](./assets/pic2.png)
-![Preview is supposed to be here :(](./assets/pic3.png)
+![Preview is supposed to be here :(](./assets/pic4.png)
